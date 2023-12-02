@@ -5,4 +5,11 @@ type BlogPost = {
     date: string,
 };
 
+type Result = {
+    id: string,
+    title: string,
+};
+
+
+
    

@@ -11,7 +11,7 @@ export default function Home() {
         voluptatem, quidem, quia voluptatum quod asperiores voluptate autem
         quibusdam doloribus fugit.
       </p>
-      <div id='posts' className="flex flex-col items-center mt-20">
+      <div className="flex flex-col items-center mt-20">
         <Posts />
       </div>
     </main>

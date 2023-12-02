@@ -4,7 +4,8 @@ import { FaYoutube, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-i
 
 export default function SocialLink() {
   return (
-    <footer className="flex justify-center items-center h-16 bg-black text-white">
+    <footer className="flex justify-center items-center h-16 bg-black text-white sticky bottom-0">
+          
         <div className="flex justify-between items-center w-1/2">
             <Link 
                 href="https://www.youtube.com/channel/UCQzO0jpcRkP-9eWKMpJyB0w" 

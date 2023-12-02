@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { getSortedPostsData } from "@/lib/posts"
+import { getSortedPostsData, getPostData } from "@/lib/posts"
 import Link from 'next/link'
 
 
@@ -7,16 +7,26 @@ type Props = {
     post: BlogPost
 }
 
+// This will generate the static paths for the dynamic routes
+// Make SSG form dynamic routes
+export function generateStaticParams() {
+    const posts = getSortedPostsData()
+    return posts.map(post => {
+        return {
+            params: {
+                postId: post.id
+            }
+        }
+    })
+}
+
+// This will generate the metadata for the dynamic routes
 export function generateMetadata({ params }: {params: {postId: string}}) {
     const posts = getSortedPostsData()
     const postId = params.postId
-
     const post = posts.find(post => post.id === postId)
 
-    if (!post ) {
-        return {
-            title: '404 - Page Not Found',
-    }}
+    if(!post) return {title :'404 - Page Not Found'}
 
     return {
         title: post.title,
@@ -25,23 +35,26 @@ export function generateMetadata({ params }: {params: {postId: string}}) {
 
 
 
-export default function Post({ params }: {params: {postId: string}}) {
+export default async function Post({ params }: {params: {postId: string}}) {
     const posts = getSortedPostsData()
     const postId = params.postId    
     const post = posts.find(post => post.id === postId)
 
-   if(!post) {
-        return notFound()
-    }
+   if(!post) return notFound()
+
+   const { title, date, contentHtml } = await getPostData(postId)
+
 
     return (
-        <section className="flex flex-col justify-center items-center mt-10">
-            <h2 className="text-2xl font-bold">{post.title}</h2>
-            <time dateTime={post.date}>{post.date}</time>
+        <main className="flex flex-col items-center h-screen mt-10">
+            <h1 className="text-2xl font-bold">{title}</h1>
+            <time dateTime={date}>{date}</time>
             <br />
-            
-            <Link href="/#posts">Back to Posts</Link>
-        </section>
+            <section className="prose prose-sm text-gray-500 text-center">   
+                <article dangerouslySetInnerHTML={{ __html: contentHtml }} />
+            </section>
+            <Link href="/"> Back to home </Link>
+        </main>
     )
 
 }
